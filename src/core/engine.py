@@ -7,10 +7,13 @@ class ScanEngine:
         self.scanner = NmapScanner()
 
 
-    def run(self, target):
+    def run(self, target, scan_type):
 
-        print("[+] Starting vulnerability assessment")
+        print("[+] Starting scan...")
 
-        scan_results = self.scanner.scan(target)
+        results = self.scanner.scan(
+        target,
+        scan_type
+        )
 
-        return scan_results
+        return results
