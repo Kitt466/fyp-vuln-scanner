@@ -26,7 +26,9 @@ class NVDClient:
 
 
         if response.status_code != 200:
+
             print("Failed to retrieve CVE data")
+
             return []
 
 
@@ -41,44 +43,103 @@ class NVDClient:
 
 
             cvss = None
+
             severity = None
 
+            confidence = "LOW"
 
-            metrics = cve.get("metrics", {})
+
+            metrics = cve.get(
+                "metrics",
+                {}
+            )
 
 
             # CVSS v3.1
             if "cvssMetricV31" in metrics:
 
                 cvss_data = (
-                    metrics["cvssMetricV31"][0]["cvssData"]
+                    metrics["cvssMetricV31"][0]
+                    ["cvssData"]
                 )
 
-                cvss = cvss_data.get("baseScore")
 
-                severity = cvss_data.get("baseSeverity")
+                cvss = cvss_data.get(
+                    "baseScore"
+                )
+
+
+                severity = cvss_data.get(
+                    "baseSeverity"
+                )
 
 
             # CVSS v3.0
             elif "cvssMetricV30" in metrics:
 
                 cvss_data = (
-                    metrics["cvssMetricV30"][0]["cvssData"]
+                    metrics["cvssMetricV30"][0]
+                    ["cvssData"]
                 )
 
-                cvss = cvss_data.get("baseScore")
 
-                severity = cvss_data.get("baseSeverity")
+                cvss = cvss_data.get(
+                    "baseScore"
+                )
 
 
-            # CVSS v2 fallback
+                severity = cvss_data.get(
+                    "baseSeverity"
+                )
+
+
+            # CVSS v2
             elif "cvssMetricV2" in metrics:
 
                 cvss_data = (
-                    metrics["cvssMetricV2"][0]["cvssData"]
+                    metrics["cvssMetricV2"][0]
+                    ["cvssData"]
                 )
 
-                cvss = cvss_data.get("baseScore")
+
+                cvss = cvss_data.get(
+                    "baseScore"
+                )
+
+
+                if cvss >= 9.0:
+
+                    severity = "CRITICAL"
+
+                elif cvss >= 7.0:
+
+                    severity = "HIGH"
+
+                elif cvss >= 4.0:
+
+                    severity = "MEDIUM"
+
+                else:
+
+                    severity = "LOW"
+
+
+
+            # Determine confidence
+            if cvss is not None:
+
+                if cvss >= 7.0:
+
+                    confidence = "HIGH"
+
+                elif cvss >= 4.0:
+
+                    confidence = "MEDIUM"
+
+                else:
+
+                    confidence = "LOW"
+
 
 
             vulnerabilities.append({
@@ -88,6 +149,8 @@ class NVDClient:
                 "cvss": cvss,
 
                 "severity": severity,
+
+                "confidence": confidence,
 
                 "description":
                     cve["descriptions"][0]["value"]

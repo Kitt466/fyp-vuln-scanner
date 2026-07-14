@@ -38,15 +38,27 @@ class ScanEngine:
 
         for service in parsed_results:
 
-            keyword = (
-                f"{service['service']} "
-                f"{service['version']}"
-            )
+            version = service.get("version")
 
 
-            vulnerabilities = self.nvd.search(
-                keyword
-            )
+            # Only perform CVE lookup when
+            # Nmap provides a version number
+            if version:
+
+                keyword = (
+                    f"{service['service']} "
+                    f"{version}"
+                )
+
+
+                vulnerabilities = self.nvd.search(
+                    keyword
+                )
+
+
+            else:
+
+                vulnerabilities = []
 
 
             service["vulnerabilities"] = vulnerabilities
