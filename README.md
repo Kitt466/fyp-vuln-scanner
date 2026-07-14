@@ -1,4 +1,4 @@
-# Automated Vulnerability Scanner
+# Automated (Intelligent) Vulnerability Scanner for Service Detection and CVE Analysis and Suggested Mitigation
 
 ## Final Year Project (FYP)
 
