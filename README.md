@@ -73,6 +73,8 @@ How a live scan works:
 ## Build the executable
 
 PyInstaller can't cross-compile: build on Windows for the `.exe`, on Linux for the binary.
+
+
 ```bash
 pip install pyinstaller
 pyinstaller vulnscan.spec
