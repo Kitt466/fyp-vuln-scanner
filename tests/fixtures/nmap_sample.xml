@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Recorded-style Nmap -sV -O output used by the offline tests. -->
+<nmaprun scanner="nmap" args="nmap -sV -O 10.0.0.5" version="7.94">
+  <host>
+    <status state="up" reason="arp-response"/>
+    <address addr="10.0.0.5" addrtype="ipv4"/>
+    <address addr="08:00:27:AA:BB:CC" addrtype="mac"/>
+    <hostnames><hostname name="lab.local" type="PTR"/></hostnames>
+    <ports>
+      <port protocol="tcp" portid="21">
+        <state state="open" reason="syn-ack"/>
+        <service name="ftp" product="vsftpd" version="2.3.4" method="probed" conf="10">
+          <cpe>cpe:/a:vsftpd:vsftpd:2.3.4</cpe>
+        </service>
+      </port>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="syn-ack"/>
+        <service name="ssh" product="OpenSSH" version="7.4" extrainfo="protocol 2.0" method="probed" conf="10">
+          <cpe>cpe:/a:openbsd:openssh:7.4</cpe>
+        </service>
+      </port>
+      <port protocol="tcp" portid="25">
+        <state state="closed" reason="reset"/>
+        <service name="smtp" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="syn-ack"/>
+        <service name="http" product="Apache httpd" version="2.4.49" extrainfo="(Unix)" method="probed" conf="10">
+          <cpe>cpe:/a:apache:http_server:2.4.49</cpe>
+        </service>
+        <script id="http-title" output="Lab page"/>
+      </port>
+      <port protocol="tcp" portid="8080">
+        <state state="open" reason="syn-ack"/>
+        <service name="http-proxy" method="table" conf="3"/>
+      </port>
+    </ports>
+    <os><osmatch name="Linux 4.15 - 5.8" accuracy="95"/></os>
+  </host>
+  <host>
+    <status state="down" reason="no-response"/>
+    <address addr="10.0.0.6" addrtype="ipv4"/>
+  </host>
+</nmaprun>

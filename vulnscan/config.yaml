@@ -1,0 +1,60 @@
+# VulnScan configuration (NFR-11: externally configurable, not embedded in code).
+# API keys are NOT stored here (NFR-09). Set them as environment variables:
+#   NVD_API_KEY      optional, raises the NVD rate limit
+#   GEMINI_API_KEY   required for AI-generated mitigation (engine backend)
+
+# Default data source (can also be switched on the New scan page):
+# engine = real Nmap + NVD + AI mitigation pipeline
+# demo   = realistic sample data, no Nmap or network needed
+backend: engine
+
+nmap:
+  # Leave empty to auto-detect from PATH and the default install folders.
+  path: ""
+
+# FR-02: quick, service detection, OS detection, vulnerability script, full
+profiles:
+  quick:
+    label: Quick
+    description: Top 100 TCP ports, no version detection
+    args: "-T4 -F"
+  service:
+    label: Service detection
+    description: Top 1000 TCP ports with service and version detection
+    args: "-sV -T4 --top-ports 1000"
+  os:
+    label: OS detection
+    description: Service detection plus operating system fingerprinting
+    args: "-sV -O -T4 --top-ports 1000"
+    requires_admin: true
+  vuln:
+    label: Vulnerability script
+    description: Service detection plus Nmap's vuln NSE scripts
+    args: "-sV --script vuln -T4 --top-ports 1000"
+  full:
+    label: Full scan
+    description: All 65535 TCP ports with service and version detection (slow)
+    args: "-sV -T4 -p-"
+
+default_profile: service
+
+nvd:
+  base_url: "https://services.nvd.nist.gov/rest/json/cves/2.0"
+  timeout_seconds: 15          # NFR-03
+  delay_without_key: 6.0       # FR-12: about 5 requests per 30 s
+  delay_with_key: 0.6          # about 50 requests per 30 s
+  results_per_page: 50
+  max_cves_per_service: 20     # highest-CVSS CVEs kept per service
+  retries: 2                   # retries on timeouts / HTTP 403, 429, 5xx
+
+gemini:
+  # Tried in order; a model the API reports as unavailable is skipped.
+  # (gemini-2.5-flash is restricted to accounts that used it before.)
+  models: ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"]
+  timeout_seconds: 30
+  delay_seconds: 6.5           # free tier allows about 10 requests per minute
+  retry_backoff_seconds: [8, 20]   # waits before retrying a busy (429/503) model
+  max_findings: 15             # AI advice for the top-priority findings only
+
+limits:
+  max_addresses: 256           # largest CIDR range accepted (/24)
