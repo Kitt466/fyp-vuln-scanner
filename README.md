@@ -1,4 +1,4 @@
-# Automated (Intelligent) Vulnerability Scanner for Service Detection and CVE Analysis and Suggested Mitigation
+# Automated Vulnerability Scanner for Service Detection and CVE Analysis and Suggested Mitigation
 
 ## Final Year Project (FYP)
 
@@ -10,6 +10,7 @@ This project is an automated vulnerability scanner that detects open ports, iden
 - Service detection
 - CVE lookup using NVD API
 - Risk scoring system
+- AI suggested mitigation
 - GUI interface
 - PDF/HTML report generation
 
