@@ -1,6 +1,6 @@
-# VulnScan (desktop)
+# VulnScan
 
-PySide6 desktop GUI for the FYP *Automated Vulnerability Scanner for Service Detection
+PySide6 GUI *Automated Vulnerability Scanner for Service Detection
 and CVE Analysis with Suggested Mitigation*. Runs on Windows and Linux and packages
 into a single executable with PyInstaller.
 
